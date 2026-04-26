@@ -1,164 +1,19 @@
-<h1 align="center"><b><img src="./demos/gagavatar_logo.png" width="520"/></b></h1>
-<h3 align="center">
-    <a href='https://arxiv.org/abs/2410.07971'><img src='https://img.shields.io/badge/ArXiv-PDF-red'></a> &nbsp; 
-    <a href='https://xg-chu.site/project_gagavatar/'><img src='https://img.shields.io/badge/Project-Page-blue'></a> &nbsp; 
-    <a href='https://www.youtube.com/watch?v=9244ZgOl4Xk'><img src='https://img.shields.io/badge/Youtube-Video-red'></a> &nbsp; 
-    <a href='https://github.com/xg-chu/GAGAvatar_track/'><img src='https://img.shields.io/badge/Data-Tracker-red'></a> &nbsp; 
-</h3>
+## 基于多视角法线先验的单目动态头部 Avatar 重建
 
-<h5 align="center">
-    <a href="https://xg-chu.site">Xuangeng Chu</a><sup>1</sup>&emsp;
-    <a href="https://www.mi.t.u-tokyo.ac.jp/harada/">Tatsuya Harada</a><sup>1,2</sup>
-    <br>
-    <sup>1</sup>The University of Tokyo,
-    <sup>2</sup>RIKEN AIP
-</h5>
+摘要：随着三维高斯泼溅（3DGS）技术在神经渲染领域的兴起，单目动态头部 Avatar 重建在虚拟数字人领域展现出巨大潜力。然而，单目输入存在的深度歧义和遮挡问题，导致模型在处理侧脸及复杂边缘几何时易出现坍塌或伪影。本文以 GAGAvatar 为基线模型，引入 SOAP（Style-Omniscient Animatable Portraits）生成的多视角法线先验作为额外几何监督信号，旨在增强重建 Avatar 的空间一致性。本文首先构建了基于 VFHQ 数据集的 Matting 预处理流程，并设计了标准特征帧导出与多视角先验生成方案。实验对比了基线模型、SOAP 从头训练以及 SOAP 微调三种策略。结果表明，直接引入 SOAP 先验进行从头训练会导致图像质量下降，但采用微调策略能有效收敛几何损失，并在保证图像质量的同时增强局部几何的稳定性。本文的研究为结合离线生成先验辅助在线三维重建提供了技术参考。
 
-<h3 align="center">
-🤩 NeurIPS 2024 🤩
-</h3>
+关键词：单目头部重建；多视角法线先验；神经渲染；3D Gaussian Splatting
+###  参考文献
+[1]Chu X, Harada T. Generalizable and animatable gaussian head avatar[J]. Advances in Neural Information Processing Systems, 2024, 37: 57642-57670.
 
-<div align="center"> 
-    <div align="center"> 
-        <b><img src="./demos/teaser.gif" alt="drawing" width="960"/></b>
-    </div>
-    <b>
-        GAGAvatar reconstructs controllable 3D head avatars from single images.
-    </b>
-    <br>
-        GAGAvatar achieves one-shot 3DGS-based head reconstruction and <b>⚡️real-time⚡️</b> reenactment.
-    <br>
-        🔥 More results can be found in our <a href="https://xg-chu.github.io/project_gagavatar/">Project Page</a>. 🔥
-</div>
+[2]Kerbl B, Kopanas G, Leimkühler T, et al. 3d gaussian splatting for real-time radiance field rendering[J]. ACM Trans. Graph., 2023, 42(4): 139:1-139:14.
 
-<!-- ## TO DO
-We are now preparing the <b>pre-trained model and quick start materials</b> and will release it within a week. -->
+[3]Liao T, Zheng Y, Xiu Y, et al. SOAP: Style-Omniscient Animatable Portraits[C]//Proceedings of the Special Interest Group on Computer Graphics and Interactive Techniques Conference Conference Papers. 2025: 1-11.
 
-## Installation
-### Clone the project
-```
-git clone --recurse-submodules git@github.com:xg-chu/GAGAvatar.git
-cd GAGAvatar
-```
+[4]Wang L X, Zhang H, Dong C, et al. VFHQ: A High-Quality Dataset and Benchmark for Video Face Super-Resolution[J]. arXiv preprint arXiv:2205.03409, 2022.
 
-### Build environment
-```
-conda env create -f environment.yml
-conda activate GAGAvatar
-```
-### Install the 3DGS renderer
+[5]Oquab M, Darcet T, Moutakanni T, et al. Dinov2: Learning robust visual features without supervision[J]. arXiv preprint arXiv:2304.07193, 2023.
 
-<details>
-<summary><span>What’s the difference between this version and the original 3DGS?</span></summary>
+[6]Li T, Bolkart T, Black M J, et al. Learning a model of facial shape and expression from 4D scans[J]. ACM Trans. Graph., 2017, 36(6): 194:1-194:17.
 
-- We changed the number of channels so that 3D Gaussians carry 32-dim features.
-- We changed the package name to avoid conflict with the original Gaussian splatting.
-
-</details>
-
-```
-git clone --recurse-submodules git@github.com:xg-chu/diff-gaussian-rasterization.git
-pip install ./diff-gaussian-rasterization
-rm -rf ./diff-gaussian-rasterization
-```
-
-### Prepare resources
-Prepare resources with:
-```
-bash ./build_resources.sh
-```
-
-Also prepare resources for GAGAvatar_track using: 
-```
-cd core/libs/GAGAvatar_track
-bash ./build_resources.sh
-```
-
-## Quick Start Guide
-Driven by another **image**:
-```
-# This will track the images online, which is slow.
-python inference.py -d ./demos/examples/2.jpg -i ./demos/examples/1.jpg
-```
-
-Driven by a tracked **video**:
-```
-python inference.py -d ./demos/drivers/obama -i ./demos/examples/1.jpg
-``` 
-Driven by a tracked **image_lmdb**:
-```
-python inference.py -d ./demos/drivers/vfhq_demo -i ./demos/examples/1.jpg
-```
-
-To test the inference speed, refer to the ```speed_test()``` function in ```inference.py```.
-
-To test your own images online, refer to ```lines 52-55``` in ```inference.py```.
-
-To test your own driving sequences (videos/images), refer to [GAGAvatar_track](https://github.com/xg-chu/GAGAvatar_track/) and demo sequences to build your own driving sequence.
-
-## Training Guide
-<details>
-<summary><span>You can use the pre-trained model directly, but if you need to retrain on your data:</span></summary>
-
-<!-- Building the dataset used for training requires img_lmdb, optim.pkl and dataset.json. -->
-### Step 1: Building the image LMDB
-Build ```img_lmdb``` yourself.
-
-
-All the images should be cropped as inference. (Refer to line 218 in ```core/libs/GAGAvatar_track/engines/engine_core.py```) 
-
-Dump images using ```core/libs/utils_lmdb.py```, there is also an API for building lmdb: ```dump(key_name, payload)```, payload should be tensor with (3, 512, 512), in [0, 255]. 
-
-015252 is video id (used when sampling), 99 is frame id (0 is the first frame, other frames id can be discontinuous).
-```
-img_lmdb:
-    '015252_99' : image payload
-```
-
-### Step 2: Track the image LMDB
-Using ```track_lmdb.py``` in ```GAGAvatar_track```, you should get a ```optim.pkl```.
-```
-optim.pkl:
-- dict_keys(['000000_0', …])
-    - "000000_0": dict_keys(['bbox', 'shapecode', 'expcode', 'posecode', 'eyecode', 'transform_matrix'])
-```
-
-### Step 3: Split the dataset
-Build ```dataset.json``` yourself, it should contain the keys in ```img_lmdb``` and ```optim.pkl```.
-```
-dataset.json: {
-    "train": ["000000_0", "000000_5", ..., '001384_654'],
-    "val":   ["015209_0", ..., "015218_7"], 
-    "test":  ["015203_0", ..., "015252_139"]
-}
-```
-
-### Step 4: Modify the config and train
-```
-python train.py --config gaga --dataset vfhq
-```
-
-</details>
-
-## Citation
-If you find our work useful in your research, please consider citing:
-```bibtex
-@inproceedings{
-    chu2024gagavatar,
-    title={Generalizable and Animatable Gaussian Head Avatar},
-    author={Xuangeng Chu and Tatsuya Harada},
-    booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
-    year={2024},
-    url={https://openreview.net/forum?id=gVM2AZ5xA6}
-}
-```
-
-## Acknowledgements
-Some part of our work is built based on FLAME, StyleMatte, EMICA and VGGHead. 
-The GAGAvatar Logo is designed by Caihong Ning.
-We also thank the following projects for sharing their great work.
-- **GPAvatar**: https://github.com/xg-chu/GPAvatar
-- **FLAME**: https://flame.is.tue.mpg.de
-- **StyleMatte**: https://github.com/chroneus/stylematte
-- **EMICA**: https://github.com/radekd91/inferno
-- **VGGHead**: https://github.com/KupynOrest/head_detector
+[7]Wang L, Zhao X, Sun J, et al. Styleavatar: Real-time photo-realistic portrait avatar from a single video[C]//ACM SIGGRAPH 2023 Conference Proceedings. 2023: 1-10.
