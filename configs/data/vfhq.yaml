@@ -1,0 +1,14 @@
+DATASET:
+    NAME: 'VFHQ'
+    LOADER: 'TrackedData'
+    FLAME_SCALE: 5.0
+    FOCAL_LENGTH: 12.0
+    POINT_PLANE_SIZE: 296
+    # PATH: '/data/umihebi0/users/x-chu/Data/VFHQ_CENTERED/'
+    # PATH: '/root/autodl-fs/vfhq_group100_116/'
+    PATH: '/root/autodl-fs/vfhq_group100_101_matted'
+    SOAP_GUIDANCE:
+        ENABLED: true
+        ROOT: '/root/autodl-fs/soap_output'
+        LOAD_SIZE: 256
+        USE_CANONICAL_FEATURE_FRAME: true

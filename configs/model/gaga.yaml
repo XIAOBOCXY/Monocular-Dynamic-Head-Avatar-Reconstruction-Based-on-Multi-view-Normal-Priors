@@ -1,0 +1,29 @@
+MODEL:
+    NAME: 'GAGAvatar'
+    TASK: 'DynamicGaussian'
+    NORMAL_LOSS:
+        ENABLED: false
+        MODE: 'screen'
+        WEIGHT: 0.05
+        RENDER_SIZE: 128
+    SOAP_GUIDANCE:
+        ENABLED: true
+        NORMAL_WEIGHT: 0.05
+        RGB_WEIGHT: 0.0
+        RENDER_SIZE: 128
+        ELEVATION: 0.0
+        VIEW_ANGLES: [0, -90, 180, 90, -45, 45]
+
+OPTIMIZE:
+    NAME: 'Adam'
+    LR_DECAY_RATE: 0.1
+    LR_DECAY_ITER: 200000
+    LEARNING_RATE: 1.0e-4
+
+TRAIN:
+    # BATCH_SIZE: 8
+    # TRAIN_ITER: 200000
+    # CHECK_INTERVAL: 10000
+    BATCH_SIZE: 4
+    TRAIN_ITER: 20000
+    CHECK_INTERVAL: 2000
